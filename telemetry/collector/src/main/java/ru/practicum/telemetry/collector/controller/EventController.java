@@ -13,7 +13,6 @@ import ru.practicum.telemetry.collector.service.CollectorService;
 import ru.practicum.telemetry.collector.model.sensor.SensorEvent;
 
 @Slf4j
-@Validated
 @RestController
 @RequestMapping(value = "/events")
 @RequiredArgsConstructor

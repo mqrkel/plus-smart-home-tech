@@ -14,24 +14,16 @@ import static org.apache.kafka.clients.producer.ProducerConfig.*;
 
 @Configuration
 public class CollectorKafkaConfig {
-    private KafkaProducer<String, SpecificRecordBase> producer;
 
     @Value("${kafka.bootstrap-server}")
     private String bootStrapServer;
 
     @Bean
-    public KafkaProducer<String, SpecificRecordBase> getProducer() {
-        if (producer == null) {
-            initProducer();
-        }
-        return producer;
-    }
-
-    private void initProducer() {
+    public KafkaProducer<String, SpecificRecordBase> kafkaProducer() {
         Properties config = new Properties();
         config.put(BOOTSTRAP_SERVERS_CONFIG, bootStrapServer);
         config.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         config.put(VALUE_SERIALIZER_CLASS_CONFIG, GeneralAvroSerializer.class.getName());
-        producer = new KafkaProducer<>(config);
+        return new KafkaProducer<>(config);
     }
 }
