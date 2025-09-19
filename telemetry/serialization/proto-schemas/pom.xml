@@ -20,6 +20,7 @@
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-protobuf</artifactId>
+            <version>1.75.0</version>
         </dependency>
 
         <!-- Until gRPC generator library moves to generated jakarta instead of javax -->

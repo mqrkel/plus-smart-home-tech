@@ -64,6 +64,7 @@
                             <sources>
                                 <source>${project.build.directory}/generated-sources</source>
                             </sources>
+
                         </configuration>
                     </execution>
                 </executions>
