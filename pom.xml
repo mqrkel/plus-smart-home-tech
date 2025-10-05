@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>ru.yandex.practicum</groupId>
-    <artifactId>smart-home-tech2</artifactId>
+    <artifactId>smart-home-tech</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -81,6 +81,12 @@
                 <artifactId>grpc-protobuf</artifactId>
                 <version>${grpc.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.34</version>
+                <scope>provided</scope>
+            </dependency>
 
             <!--    / GRPC dependencies management        -->
         </dependencies>
@@ -103,6 +109,15 @@
                     <groupId>io.github.ascopes</groupId>
                     <artifactId>protobuf-maven-plugin</artifactId>
                     <version>${protobuf-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <layers>
+                            <enabled>true</enabled>
+                        </layers>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>

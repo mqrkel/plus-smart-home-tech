@@ -15,12 +15,13 @@
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
+            <version>${grpc.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-protobuf</artifactId>
-            <version>1.75.0</version>
+            <version>${grpc.version}</version>
         </dependency>
 
         <!-- Until gRPC generator library moves to generated jakarta instead of javax -->
