@@ -1,0 +1,15 @@
+logging:
+  level:
+    ru.yandex.practicum.aggregator: DEBUG
+
+kafka:
+  bootstrapServer: "localhost:9092"
+  consumer:
+    client_id: "client_01"
+    group_id: "group_01"
+    topic: "telemetry.sensors.v1"
+    maxPollIntervalMs : 1000
+    pollTimeoutMs: 100
+    enableAutoCommit: "false"
+  producer:
+    topic: "telemetry.snapshots.v1"
