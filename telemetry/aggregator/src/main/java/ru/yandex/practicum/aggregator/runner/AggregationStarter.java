@@ -1,4 +1,4 @@
-package ru.yandex.practicum.aggregator;
+package ru.yandex.practicum.aggregator.runner;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -24,6 +24,7 @@ public class AggregationStarter {
     private final AggregatorKafkaClient kafkaClient;
     private final SnapshotService service;
     private final KafkaConfig kafkaConfig;
+    private volatile boolean running = true;
 
     public AggregationStarter(AggregatorKafkaClient kafkaClient,
                               SnapshotService service,
@@ -39,8 +40,9 @@ public class AggregationStarter {
     }
 
     public void stop() {
-        log.info("AggregationStarter::stop");
-        kafkaClient.stop();
+        log.info("Stopping AggregationStarter...");
+        running = false;
+        kafkaClient.getConsumer().wakeup();
     }
 
     public void start() {
@@ -48,8 +50,7 @@ public class AggregationStarter {
         try {
             this.kafkaClient.getConsumer().subscribe(List.of(kafkaConfig.getConsumer().getTopic()));
             long pollTimeoutMs = kafkaConfig.getConsumer().pollTimeoutMs;
-            while (true) {
-
+            while (running) {
                 ConsumerRecords<String, SensorEventAvro> records =
                         kafkaClient.getConsumer().poll(Duration.ofMillis(pollTimeoutMs));
                 if (!records.isEmpty()) {
@@ -69,14 +70,11 @@ public class AggregationStarter {
                     commitOffsets(offsets, processed);
                 }
             }
-        }
-        catch (WakeupException e) {
+        } catch (WakeupException e) {
             log.error(e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
-        }
-        finally {
+        } finally {
             log.info("Consumer was closed");
             kafkaClient.getProducer().flush();
             kafkaClient.getProducer().close();
@@ -101,4 +99,5 @@ public class AggregationStarter {
             }
         });
     }
+
 }

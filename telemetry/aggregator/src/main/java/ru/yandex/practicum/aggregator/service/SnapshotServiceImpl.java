@@ -6,13 +6,14 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.aggregator.config.KafkaConfig;
-import ru.yandex.practicum.aggregator.kafka.AggregatorKafkaClient;
 import ru.yandex.practicum.aggregator.domain.processor.SensorEventProcessor;
+import ru.yandex.practicum.aggregator.kafka.AggregatorKafkaClient;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,10 +73,11 @@ public class SnapshotServiceImpl implements SnapshotService {
     }
 
     private SensorsSnapshotAvro createNewSnapshot(String hubId) {
-        log.debug("create snapshot for {}", hubId);
+        Instant nowTruncated = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+        log.debug("create snapshot for {} at {}", hubId, nowTruncated);
         return SensorsSnapshotAvro.newBuilder()
                 .setHubId(hubId)
-                .setTimestamp(Instant.EPOCH)
+                .setTimestamp(nowTruncated)
                 .setSensorsState(new HashMap<>())
                 .build();
     }
@@ -100,7 +102,7 @@ public class SnapshotServiceImpl implements SnapshotService {
         ProducerRecord<String, SpecificRecordBase> producerRecord = new ProducerRecord<>(
                 kafkaConfig.getProducer().getTopic(),
                 null,
-                Instant.now().toEpochMilli(),
+                snapshot.getTimestamp().toEpochMilli(),
                 hubId,
                 snapshot);
         kafkaClient.getProducer().send(producerRecord, (metadata, exception) -> {
