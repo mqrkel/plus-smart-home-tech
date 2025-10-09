@@ -22,20 +22,27 @@ public abstract class BaseHubEventHandler<T extends SpecificRecordBase> implemen
 
     @Override
     public void handleEvent(HubEventProto event) {
-        log.debug("handleEvent");
+
         T payload = toAvro(event);
+
+        Instant timestamp = Instant.ofEpochSecond(
+                event.getTimestamp().getSeconds(),
+                event.getTimestamp().getNanos()
+        );
+
         HubEventAvro eventAvro = HubEventAvro.newBuilder()
                 .setHubId(event.getHubId())
-                .setTimestamp(Instant.ofEpochSecond(event.getTimestamp().getSeconds(), event.getTimestamp().getNanos()))
+                .setTimestamp(timestamp)
                 .setPayload(payload)
                 .build();
 
         ProducerRecord<String, SpecificRecordBase> producerRecord = new ProducerRecord<>(
                 topic,
                 null,
-                Instant.now().toEpochMilli(),
+                timestamp.toEpochMilli(),
                 eventAvro.getHubId(),
-                eventAvro);
+                eventAvro
+        );
 
         log.debug("Sending event to kafka: {}", producerRecord);
         producer.send(producerRecord);
@@ -45,9 +52,8 @@ public abstract class BaseHubEventHandler<T extends SpecificRecordBase> implemen
 
     public void validateEventType(HubEventProto event) {
         if (event.getPayloadCase() != getEventType()) {
-            String message = "Expected " + getEventType()
-                    + " but got " + event.getPayloadCase() + ". Hub ID: " + event.getHubId();
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException("Expected " + getEventType()
+                                               + " but got " + event.getPayloadCase() + ". Hub ID: " + event.getHubId());
         }
     }
 }
