@@ -103,14 +103,14 @@
                 <plugin>
                     <groupId>org.apache.avro</groupId>
                     <artifactId>avro-maven-plugin</artifactId>
-                    <version>1.11.3</version> <!-- укажи версию Avro, например 1.11.3 -->
+                    <version>1.11.3</version>
                 </plugin>
 
                 <!-- Protobuf plugin -->
                 <plugin>
                     <groupId>io.github.ascopes</groupId>
                     <artifactId>protobuf-maven-plugin</artifactId>
-                    <version>2.4.0</version> <!-- твоя текущая версия -->
+                    <version>2.4.0</version>
                 </plugin>
 
                 <!-- Compiler plugin -->

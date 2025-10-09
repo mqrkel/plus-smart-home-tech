@@ -1,13 +1,12 @@
-package ru.yandex.practicum.aggregator;
+package ru.yandex.practicum.aggregator.runner;
 
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 
-@SpringBootApplication
-@ConfigurationProperties
+@SpringBootApplication(scanBasePackages = "ru.yandex.practicum.aggregator")
+
 public class AggregatorApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext configurableApplicationContext = SpringApplication.run(AggregatorApplication.class, args);

@@ -1,4 +1,4 @@
-package ru.practicum.telemetry.collector.service;
+package ru.practicum.telemetry.collector.config;
 
 import ru.yandex.practicum.serializer.GeneralAvroSerializer;
 import org.apache.avro.specific.SpecificRecordBase;
