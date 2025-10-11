@@ -112,5 +112,6 @@ public class SnapshotServiceImpl implements SnapshotService {
                 log.debug("Successfully sent to topic: {}", metadata.topic());
             }
         });
+        kafkaClient.getProducer().flush();
     }
 }
