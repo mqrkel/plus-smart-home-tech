@@ -1,5 +1,10 @@
-server:
-  port: 8080
+grpc:
+  server:
+    port: 59091
+
+logging:
+  level:
+    ru.practicum.telemetry.collector: DEBUG
 
 kafka:
   bootstrap-server: "localhost:9092"

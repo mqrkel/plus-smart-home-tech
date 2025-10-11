@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Value;
-import ru.practicum.telemetry.collector.model.hub.HubEvent;
 import ru.practicum.telemetry.collector.service.KafkaEventProducer;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
+
+import java.time.Instant;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,31 +21,39 @@ public abstract class BaseHubEventHandler<T extends SpecificRecordBase> implemen
     private final KafkaEventProducer producer;
 
     @Override
-    public void handleEvent(HubEvent event) {
-        T payload = convertToAvro(event);
+    public void handleEvent(HubEventProto event) {
+
+        T payload = toAvro(event);
+
+        Instant timestamp = Instant.ofEpochSecond(
+                event.getTimestamp().getSeconds(),
+                event.getTimestamp().getNanos()
+        );
+
         HubEventAvro eventAvro = HubEventAvro.newBuilder()
                 .setHubId(event.getHubId())
-                .setTimestamp(event.getTimestamp())
+                .setTimestamp(timestamp)
                 .setPayload(payload)
                 .build();
 
-        ProducerRecord<String, SpecificRecordBase> producerRecord =
-                new ProducerRecord<>(topic, eventAvro.getHubId(), eventAvro);
+        ProducerRecord<String, SpecificRecordBase> producerRecord = new ProducerRecord<>(
+                topic,
+                null,
+                timestamp.toEpochMilli(),
+                eventAvro.getHubId(),
+                eventAvro
+        );
 
-        log.debug("Sending {} event to Kafka topic {} for hubId={}",
-                event.getClass().getSimpleName(), topic, event.getHubId());
+        log.debug("Sending event to kafka: {}", producerRecord);
         producer.send(producerRecord);
     }
 
-    protected abstract T convertToAvro(HubEvent event);
+    protected abstract T toAvro(HubEventProto event);
 
-    protected void ensureCorrectEventType(HubEvent event, Class<? extends HubEvent> expectedClass) {
-        if (!expectedClass.isInstance(event)) {
-            String message = String.format("Expected %s but got %s. Hub ID: %s",
-                    expectedClass.getSimpleName(),
-                    event.getClass().getSimpleName(),
-                    event.getHubId());
-            throw new IllegalArgumentException(message);
+    public void validateEventType(HubEventProto event) {
+        if (event.getPayloadCase() != getEventType()) {
+            throw new IllegalArgumentException("Expected " + getEventType()
+                                               + " but got " + event.getPayloadCase() + ". Hub ID: " + event.getHubId());
         }
     }
 }

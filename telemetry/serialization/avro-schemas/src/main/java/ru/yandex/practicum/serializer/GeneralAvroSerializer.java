@@ -18,7 +18,7 @@ public class GeneralAvroSerializer implements Serializer<SpecificRecordBase> {
     @Override
     public byte[] serialize(String s, SpecificRecordBase event) {
         if (event == null) {
-            return new byte[0];
+            return null;
         }
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {

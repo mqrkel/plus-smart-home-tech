@@ -1,12 +1,11 @@
 package ru.practicum.telemetry.collector.service;
 
-import jakarta.validation.Valid;
-import ru.practicum.telemetry.collector.model.hub.HubEvent;
-import ru.practicum.telemetry.collector.model.sensor.SensorEvent;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 
 public interface CollectorService {
 
-    void collectSensorEvent(SensorEvent event);
+    void collectSensorEvent(SensorEventProto request);
 
-    void collectHubEvent(@Valid HubEvent event);
+    void collectHubEvent(HubEventProto request);
 }
