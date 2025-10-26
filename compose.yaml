@@ -43,8 +43,33 @@ services:
       - POSTGRES_DB=analyzerdb
       - POSTGRES_USER=analyzer
       - POSTGRES_PASSWORD=analyzer
-    healthcheck:
-      test: pg_isready -q -d $$POSTGRES_DB -u $$POSTGRES_USER
-      timeout: 5s
-      interval: 5s
-      retries: 10
+
+  commerce-cart-db:
+    image: postgres:16.1
+    container_name: postgres-commerce-cart-db
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_DB=commercecartdb
+      - POSTGRES_USER=cart
+      - POSTGRES_PASSWORD=cart
+
+  commerce-store-db:
+    image: postgres:16.1
+    container_name: postgres-commerce-store-db
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_DB=commercestoredb
+      - POSTGRES_USER=store
+      - POSTGRES_PASSWORD=store
+
+  commerce-warehouse-db:
+    image: postgres:16.1
+    container_name: postgres-commerce-warehouse-db
+    ports:
+      - "5437:5432"
+    environment:
+      - POSTGRES_DB=commercewarehousedb
+      - POSTGRES_USER=warehouse
+      - POSTGRES_PASSWORD=warehouse

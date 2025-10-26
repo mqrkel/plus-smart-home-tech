@@ -1,15 +1,21 @@
-logging:
-  level:
-    ru.yandex.practicum.aggregator: DEBUG
+spring:
+  application:
+    name: aggregator
 
-kafka:
-  bootstrapServer: "localhost:9092"
-  consumer:
-    client_id: "client_01"
-    group_id: "group_01"
-    topic: "telemetry.sensors.v1"
-    maxPollIntervalMs : 1000
-    pollTimeoutMs: 100
-    enableAutoCommit: "false"
-  producer:
-    topic: "telemetry.snapshots.v1"
+  config:
+    import: "configserver:"
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: config-server
+      fail-fast: true
+      retry:
+        useRandomPolicy: true
+        max-interval: 6000
+
+eureka:
+  client:
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
