@@ -3,7 +3,6 @@ package ru.yandex.practicum.warehouse.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.interaction.api.dto.cart.ShoppingCartDto;
 import ru.yandex.practicum.interaction.api.dto.warehouse.AddProductToWarehouseRequest;
@@ -13,7 +12,6 @@ import ru.yandex.practicum.interaction.api.dto.warehouse.NewProductInWarehouseRe
 import ru.yandex.practicum.warehouse.service.WarehouseService;
 
 @Slf4j
-@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/warehouse")

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.warehouse.service;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.interaction.api.dto.cart.ShoppingCartDto;
@@ -25,14 +26,17 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final WarehouseRepository warehouseRepository;
     private final AddressMapper addressMapper;
     private final WarehouseProductMapper warehouseProductMapper;
-    private final UUID idAddress;
+    private UUID idAddress;
 
     public WarehouseServiceImpl(AddressRepository addressRepository, WarehouseRepository warehouseRepository, AddressMapper addressMapper, WarehouseProductMapper warehouseProductMapper) {
         this.addressRepository = addressRepository;
         this.warehouseRepository = warehouseRepository;
         this.addressMapper = addressMapper;
         this.warehouseProductMapper = warehouseProductMapper;
+    }
 
+    @PostConstruct
+    private void initAddress() {
         String[] addresses = {"ADDRESS_1", "ADDRESS_2"};
         int randomIdx = new SecureRandom().nextInt(addresses.length);
         this.idAddress = addressRepository.save(Address.createAddress(addresses[randomIdx])).getId();
