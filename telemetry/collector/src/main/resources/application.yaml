@@ -1,13 +1,22 @@
-grpc:
-  server:
-    port: 59091
+spring:
+  application:
+    name: collector
 
-logging:
-  level:
-    ru.practicum.telemetry.collector: DEBUG
+  config:
+    import: "configserver:"
 
-kafka:
-  bootstrap-server: "localhost:9092"
-  topics:
-    sensor: "telemetry.sensors.v1"
-    hub: "telemetry.hubs.v1"
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: config-server
+      fail-fast: true
+      retry:
+        useRandomPolicy: true
+        max-interval: 6000
+
+eureka:
+  client:
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
