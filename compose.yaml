@@ -73,3 +73,33 @@ services:
       - POSTGRES_DB=commercewarehousedb
       - POSTGRES_USER=warehouse
       - POSTGRES_PASSWORD=warehouse
+
+  order-db:
+    image: postgres:16.1
+    container_name: postgres-order-db
+    ports:
+      - "5438:5432"
+    environment:
+      POSTGRES_DB: order
+      POSTGRES_USER: order
+      POSTGRES_PASSWORD: order
+
+  payment-db:
+    image: postgres:16.1
+    container_name: postgres-payment-db
+    ports:
+      - "5439:5432"
+    environment:
+      POSTGRES_DB: payment
+      POSTGRES_USER: payment
+      POSTGRES_PASSWORD: payment
+
+  delivery-db:
+    image: postgres:16.1
+    container_name: postgres-delivery-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: delivery
+      POSTGRES_USER: delivery
+      POSTGRES_PASSWORD: delivery

@@ -1,11 +1,13 @@
 DROP TABLE IF EXISTS dimension CASCADE;
 DROP TABLE IF EXISTS warehouse_product CASCADE;
-
-CREATE TABLE dimension (
-                           id UUID PRIMARY KEY,
-                           width NUMERIC(19, 4) NOT NULL,
-                           height NUMERIC(19, 4) NOT NULL,
-                           depth NUMERIC(19, 4) NOT NULL
+DROP TABLE IF EXISTS booking CASCADE;
+DROP TABLE IF EXISTS address CASCADE;
+CREATE TABLE dimension
+(
+    id     UUID PRIMARY KEY,
+    width  NUMERIC(19, 4) NOT NULL,
+    height NUMERIC(19, 4) NOT NULL,
+    depth  NUMERIC(19, 4) NOT NULL
 );
 CREATE TABLE warehouse_product
 (
@@ -16,15 +18,20 @@ CREATE TABLE warehouse_product
     dimension_id UUID           NOT NULL UNIQUE,
     CONSTRAINT fk_dimension FOREIGN KEY (dimension_id) REFERENCES dimension (id)
 );
-DROP TABLE IF EXISTS address CASCADE;
 
-CREATE TABLE address (
-                         id UUID PRIMARY KEY,
-                         country VARCHAR(255) NOT NULL,
-                         city    VARCHAR(255) NOT NULL,
-                         street  VARCHAR(255) NOT NULL,
-                         house   VARCHAR(255) NOT NULL,
-                         flat    VARCHAR(255)
+CREATE TABLE address
+(
+    id      UUID PRIMARY KEY,
+    country VARCHAR(255) NOT NULL,
+    city    VARCHAR(255) NOT NULL,
+    street  VARCHAR(255) NOT NULL,
+    house   VARCHAR(255) NOT NULL,
+    flat    VARCHAR(255)
 );
-
+CREATE TABLE IF NOT EXISTS bookings
+(
+    booking_id UUID PRIMARY KEY,
+    product_id UUID NOT NULL,
+    order_id   UUID NOT NULL
+);
 

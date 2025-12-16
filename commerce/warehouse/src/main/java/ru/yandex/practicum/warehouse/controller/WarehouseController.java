@@ -4,18 +4,19 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.interaction.api.dto.cart.ShoppingCartDto;
-import ru.yandex.practicum.interaction.api.dto.warehouse.AddProductToWarehouseRequest;
-import ru.yandex.practicum.interaction.api.dto.warehouse.AddressDto;
-import ru.yandex.practicum.interaction.api.dto.warehouse.BookedProductsDto;
-import ru.yandex.practicum.interaction.api.dto.warehouse.NewProductInWarehouseRequest;
+import ru.yandex.practicum.interaction.api.cart.ShoppingCartDto;
+import ru.yandex.practicum.interaction.api.warehouse.*;
 import ru.yandex.practicum.warehouse.service.WarehouseService;
+
+import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/warehouse")
 public class WarehouseController {
+
     private final WarehouseService warehouseService;
 
     @PutMapping
@@ -44,9 +45,29 @@ public class WarehouseController {
     public AddressDto getAddress() {
         log.info("Запрос адреса склада");
         AddressDto result = warehouseService.getAddress();
-        log.info("Адрес склада предоставлен: {} {} {}, {}", result.getCountry(), result.getCity(), result.getStreet(),
-                result.getHouse());
+        log.info("Адрес склада предоставлен: {} {} {}, {}", result.getCountry(), result.getCity(), result.getStreet(), result.getHouse());
+        return result;
+    }
 
+    @PostMapping("/shipped")
+    public void shippedToDelivery(@Valid @RequestBody ShipperToDeliveryRequest request) {
+        log.info("Передача товара в доставку: {}", request);
+        warehouseService.shippedToDelivery(request);
+        log.info("Передача товара в доставку успешно завершена: {}", request);
+    }
+
+    @PostMapping("/return")
+    public void returnProducts(@RequestBody Map<UUID, Long> products) {
+        log.info("Начинаем возврат товаров на склад: {}", products);
+        warehouseService.returnProducts(products);
+        log.info("Возврат товаров успешно завершён: {}", products);
+    }
+
+    @PostMapping("/assembly")
+    public BookedProductsDto assemblyProductsForOrder(@Valid @RequestBody AssemblyProductsForOrderRequest request) {
+        log.info("Начинаем сборку товаров: {}", request);
+        BookedProductsDto result = warehouseService.assemblyProductsForOrder(request);
+        log.info("Сборка товаров успешно завершена: {}", result);
         return result;
     }
 }

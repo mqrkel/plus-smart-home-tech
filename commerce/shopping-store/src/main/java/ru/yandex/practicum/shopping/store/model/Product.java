@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.yandex.practicum.interaction.api.enums.ProductCategory;
-import ru.yandex.practicum.interaction.api.enums.ProductState;
-import ru.yandex.practicum.interaction.api.enums.QuantityState;
+import ru.yandex.practicum.interaction.api.store.ProductCategory;
+import ru.yandex.practicum.interaction.api.store.ProductState;
+import ru.yandex.practicum.interaction.api.store.QuantityState;
 
 import java.math.BigDecimal;
 import java.util.UUID;

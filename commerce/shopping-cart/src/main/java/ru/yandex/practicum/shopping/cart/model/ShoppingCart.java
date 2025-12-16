@@ -3,7 +3,7 @@ package ru.yandex.practicum.shopping.cart.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.yandex.practicum.shopping.cart.model.enums.ShoppingCartStatus;
+import ru.yandex.practicum.interaction.api.cart.ShoppingCartState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class ShoppingCart {
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)
     @Builder.Default
-    ShoppingCartStatus status = ShoppingCartStatus.ACTIVE;
+    ShoppingCartState status = ShoppingCartState.ACTIVE;
 
     @ElementCollection
     @CollectionTable(name = "cart_products", joinColumns = @JoinColumn(name = "cart_id"))

@@ -9,8 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.interaction.api.dto.cart.ChangeProductQuantityRequest;
-import ru.yandex.practicum.interaction.api.dto.cart.ShoppingCartDto;
+import ru.yandex.practicum.interaction.api.cart.ChangeProductQuantityRequest;
+import ru.yandex.practicum.interaction.api.cart.ShoppingCartDto;
 import ru.yandex.practicum.shopping.cart.service.CartService;
 
 import java.util.List;

@@ -25,7 +25,7 @@ public class WarehouseProduct {
     @NotNull
     @Column(nullable = false)
     @Builder.Default
-    Integer quantity = 0;
+    Long quantity = 0L;
 
     @NotNull
     @Positive

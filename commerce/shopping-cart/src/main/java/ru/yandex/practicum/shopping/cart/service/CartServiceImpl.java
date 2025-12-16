@@ -4,14 +4,14 @@ import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.interaction.api.dto.cart.ChangeProductQuantityRequest;
-import ru.yandex.practicum.interaction.api.dto.cart.ShoppingCartDto;
+import ru.yandex.practicum.interaction.api.cart.ChangeProductQuantityRequest;
+import ru.yandex.practicum.interaction.api.cart.ShoppingCartDto;
+import ru.yandex.practicum.interaction.api.client.WarehouseFeignClient;
 import ru.yandex.practicum.interaction.api.exception.cart.NotAuthorizedUserException;
 import ru.yandex.practicum.interaction.api.exception.cart.ShoppingCartDeactivateException;
-import ru.yandex.practicum.interaction.api.feign.client.warehouse.WarehouseFeignClient;
 import ru.yandex.practicum.shopping.cart.mapper.ShoppingCartMapper;
 import ru.yandex.practicum.shopping.cart.model.ShoppingCart;
-import ru.yandex.practicum.shopping.cart.model.enums.ShoppingCartStatus;
+import ru.yandex.practicum.interaction.api.cart.ShoppingCartState;
 import ru.yandex.practicum.shopping.cart.repository.ShoppingCartRepository;
 
 import java.util.List;
@@ -59,7 +59,7 @@ public class CartServiceImpl implements CartService {
     public void deactivationShoppingCart(String username) {
         checkUsernameForEmpty(username);
         ShoppingCart cart = getOrCreateCart(username);
-        cart.setStatus(ShoppingCartStatus.DEACTIVATE);
+        cart.setStatus(ShoppingCartState.DEACTIVATE);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class CartServiceImpl implements CartService {
     }
 
     private void validateCartStatus(ShoppingCart cart) {
-        if (cart.getStatus() == ShoppingCartStatus.DEACTIVATE) {
+        if (cart.getStatus() == ShoppingCartState.DEACTIVATE) {
             throw new ShoppingCartDeactivateException(
                     "Корзина пользователя деактивирована",
                     "Ваша корзина сейчас недоступна"
